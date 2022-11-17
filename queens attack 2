@@ -1,0 +1,98 @@
+public static int queensAttack(int n, int k, int r_q, int c_q, List<List<Integer>> obstacles) {
+    // Write your code here
+        int count = 0;
+        int U = 0;
+        int UL = 0;
+        int L = 0;
+        int DL = 0;
+        int D = 0;
+        int DR = 0;
+        int R = 0;
+        int UR = 0;
+        List<Integer> q = new ArrayList<>();
+        q.add(r_q);
+        q.add(c_q);
+        
+        for (List<Integer> obstacle : obstacles) {
+            //IF WITHIN THE SAME Y
+            if(obstacle.get(1).equals(q.get(1))){
+                //IF ABOVE
+                if(obstacle.get(0) > q.get(0)){
+                    //System.out.println(obstacle + " is above");
+                    U = Math.max(U, n - obstacle.get(0) + 1);
+                }
+                //IF BELOW
+                else{
+                    //System.out.println(obstacle + " is below");
+                    D = Math.max(D, obstacle.get(0));
+                }
+            }
+            //IF WITHIN SAME X
+            else if(obstacle.get(0).equals(q.get(0))){
+                //IF RIGHT
+                if(obstacle.get(1) > q.get(1)){
+                    //System.out.println(obstacle + " is on right");
+                    R = Math.max(R, n - obstacle.get(1) + 1);
+                }
+                //IF LEFT
+                else{
+                    //System.out.println(obstacle + " is on left");
+                    L = Math.max(L, obstacle.get(1));
+                }
+            }
+            //IF WITHIN THE SAME DIAGONAL AXIS
+            else if(Math.abs(obstacle.get(0) - q.get(0)) == Math.abs(obstacle.get(1) - q.get(1))){
+                // //System.out.println(obstacle + " is in diagonal axis");
+                if(obstacle.get(0) > q.get(0) && obstacle.get(1) > q.get(1)){
+                    //System.out.println(obstacle + " is on upper right");
+                    UR = Math.max(UR, n - Math.max(obstacle.get(0), obstacle.get(1)) + 1);
+                }
+                else if(obstacle.get(0) < q.get(0) && obstacle.get(1) > q.get(1)){
+                    //System.out.println(obstacle + " is on lower right");
+                    DR = Math.max(DR, Math.min(n - obstacle.get(1) + 1, obstacle.get(0)));
+                    //x
+                    //n - y + 1
+                }
+                else if(obstacle.get(0) < q.get(0) && obstacle.get(1) < q.get(1)){
+                    //System.out.println(obstacle + " is on lower left");
+                    DL = Math.max(DL, Math.min(obstacle.get(0), obstacle.get(1)));
+                }
+                else if(obstacle.get(0) > q.get(0) && obstacle.get(1) < q.get(1)){
+                    //System.out.println(obstacle + " is on upper left");
+                    UL = Math.max(UL, Math.min(n - obstacle.get(0) + 1, obstacle.get(1)));
+                    //y
+                    //n - x + 1
+                }
+            }
+            else{
+            //System.out.println(q + " : " + obstacle + " =  NOT BLOCKING");
+            }
+            //System.out.println();
+        }
+        
+        count -= U;
+        //System.out.println("1. COUNT -= " + U + " = " + count);
+        count -= UL;
+        //System.out.println("2. COUNT -= " + UL + " = " + count);
+        count -= L;
+        //System.out.println("3. COUNT -= " + L + " = " + count);
+        count -= DL;
+        //System.out.println("4. COUNT -= " + DL + " = " + count);
+        count -= D;
+        //System.out.println("5. COUNT -= " + D + " = " + count);
+        count -= DR;
+        //System.out.println("6. COUNT -= " + DR + " = " + count);
+        count -= R;
+        //System.out.println("7. COUNT -= " + R + " = " + count);
+        count -= UR;
+        //System.out.println("8. COUNT -= " + UR + " = " + count);
+        count += n - q.get(0);//above
+        count += q.get(0) - 1;//below
+        count += n - q.get(1);//right
+        count += q.get(1) - 1;//left
+        count += n - Math.max(q.get(0), q.get(1));//upper right
+        count += Math.min(q.get(0) - 1, n - q.get(1));//lower right
+        count += Math.min(q.get(0) - 1, q.get(1) - 1);//lower left
+        count += Math.min(n - q.get(0), q.get(1) - 1);//upper left
+        return count;
+    }
