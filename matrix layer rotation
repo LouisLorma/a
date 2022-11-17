@@ -1,0 +1,123 @@
+public static void matrixRotation(List<List<Integer>> matrix, int r) {
+    // Write your code here
+        List<List<Integer>> result = new ArrayList<>();
+        int row = matrix.size();
+        int col = matrix.get(0).size();
+        for (int i = 0; i < row; i++) {
+            result.add(new ArrayList<>());
+            for (int j = 0; j < col; j++){
+                result.get(i).add(-1);
+            }
+        }
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++){
+                int ix  = j;
+                int iy = i;
+                int layer = 0;
+                if(ix >= Math.floorDiv(col, 2) || iy >= Math.floorDiv(row, 2)){
+                    if(ix >= Math.floorDiv(col, 2) && iy >= Math.floorDiv(row, 2))
+                        layer = Math.min(col - ix - 1, row - iy - 1);
+                    else if(ix >= Math.floorDiv(col, 2) && iy < Math.floorDiv(row, 2))
+                        layer = Math.min(col - ix - 1, iy);
+                    else if(ix < Math.floorDiv(col, 2) && iy >= Math.floorDiv(row, 2))
+                        layer = Math.min(ix, row - iy - 1);
+                }
+                else{
+                    layer = Math.min(ix, iy);
+                }
+                
+                //count how many they are in a layer to reduce rotations needed.
+                // int tempr = r % (row - layer) * (col - layer);
+                int count = ((col - (layer * 2)) * (row - (layer * 2))) - ((col - (layer * 2) - 2) * (row - (layer * 2) - 2));
+                int tempr = r % count;
+                
+                // System.out.println();
+                // System.out.println(i + ":" + j);
+                // System.out.println("Count = " + count);
+                // System.out.println("tempr = " + tempr);
+                // int tempr = r;
+                while(true){
+                    // System.out.println();
+                    // System.out.println(tempr);
+                    // System.out.println("ix = " + ix);
+                    // System.out.println("iy = " + iy);
+                    // System.out.println("layer = " + layer);
+                    // if(i == 1 && j == 3){
+                    //     // System.out.println(ix + ":" + iy);
+                    //     // System.out.println("TEMPR = " + tempr);
+                    //     System.out.println("layer = " + layer);
+                    // }
+                    if(iy == layer){
+                        if(ix - tempr < layer){
+                            tempr = tempr - ix + layer;
+                            ix = layer;
+                            // System.out.println("HERE1");
+                        }
+                        else{
+                            ix -= tempr;
+                            // System.out.println("HERE2");
+                            break;
+                        }
+                    }
+                    if(ix == layer){
+                        if((row - iy - 1) - tempr < layer){
+                            tempr = tempr - (row - iy - 1)  + layer;
+                            iy = row - 1 - layer;
+                            // System.out.println("HERE3");
+                        }
+                        else{
+                            iy += tempr;
+                            // System.out.println("HERE4");
+                            break;
+                        }
+                    }
+                    if(iy == row - 1 - layer){
+                        if((col - ix - 1) - tempr < layer){
+                            tempr = tempr - (col - ix - 1)  + layer;
+                            ix = col - 1 - layer;
+                            // System.out.println("HERE5");
+                        }
+                        else{
+                            ix += tempr;
+                            // System.out.println("HERE6");
+                            break;
+                        }
+                    }
+                    if(ix == col - 1 - layer){
+                        if((iy) - tempr < layer){
+                            tempr = tempr - iy  + layer;
+                            iy = layer;
+                            // System.out.println("HERE7");
+                        }
+                        else{
+                            iy -= tempr;
+                            // System.out.println("HERE8");
+                            break;
+                        }
+                    }
+                }
+                
+                result.get(iy).set(ix, matrix.get(i).get(j));
+                
+                // System.out.println();
+                // for (List<Integer> list : result) {
+                //     for (Integer x : list) {
+                //         System.out.print(x + " ");
+                //     }
+                //         System.out.println();
+                // }
+                
+            }
+        }
+        
+        
+        // System.out.println();
+        for (List<Integer> list : result) {
+            for (Integer i : list) {
+                System.out.print(i + " ");
+            }
+                System.out.println();
+        }
+        
+    }
